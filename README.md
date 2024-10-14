@@ -1,7 +1,7 @@
 
-# AlgoByPrabhat
+# VisualAlgo
 
-**AlgoByPrabhat** is a platform designed to simplify learning complex data structures and algorithms through interactive and engaging visualizations. Whether you're a student, coding enthusiast, or professional preparing for interviews, this platform serves as a valuable resource for mastering essential topics.
+**VisualAlgo** is a platform designed to simplify learning complex data structures and algorithms through interactive and engaging visualizations. Whether you're a student, coding enthusiast, or professional preparing for interviews, this platform serves as a valuable resource for mastering essential topics.
 
 ## Features
 
