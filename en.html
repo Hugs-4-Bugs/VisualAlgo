@@ -1,0 +1,2432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="VisuAlgo was conceptualised in 2011 by Dr Steven Halim as a tool to help his students better understand data structures and algorithms, by allowing them to learn the basics on their own and at their own pace. Together with his students from the National University of Singapore, a series of visualizations were developed and consolidated, from simple sorting algorithms to complex graph data structures. Though specifically designed for the use of NUS students taking various data structure and algorithm classes (CS1010/equivalent, CS2040/equivalent, CS3230, CS3233, and CS4234), as advocators of online learning, we hope that curious minds around the world will find these visualizations useful as well.">
+    <meta name="keywords" content="VisuAlgo Data Structure Algorithm Visualization Animation Online Learning Tutorial Lecture">
+
+    <meta name="csrf-token" content="BuZiwcA7ZL3UEHfRnz97Eb9ro2zGe5HUjb8Ddbvm">
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+    <meta property="og:image" content="https://visualgo.net/img/png.png">
+    <!-- <title>visualising data structures and algorithms through animation - VisuAlgo</title> -->
+    <link rel="icon" href="https://visualgo.net/img/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="https://visualgo.net/img/favicon.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://visualgo.net/img/favicon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://visualgo.net/img/favicon.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://visualgo.net/img/favicon.png">
+    <link rel="stylesheet" href="https://visualgo.net/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://visualgo.net/fonts/silkscreen/stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="https://visualgo.net/css/common-1.0.2.css">
+    <style>
+        /* @charset  "utf-8"; // dropped on 4 Jan 2022, see if it causes issue */
+
+        h1 {
+            text-align: center;
+            font-family: 'SilkscreenNormal';
+            font-size: 36px;
+            margin-top: 50px;
+        }
+
+        h2 {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        #searchbar {
+            text-align: center;
+        }
+
+        #search {
+            width: 250px;
+            padding: 7px 10px;
+            box-shadow: 0px 0px 3px #929292 inset;
+            background: white;
+            color: #888888;
+            font-size: 14px;
+        }
+
+        #show-filters {
+            cursor: pointer;
+            color: white;
+            padding: 7px 11px 6px;
+            margin-left: -1px;
+            display: inline-block;
+        }
+
+        #show-filters img {
+            display: inline-block;
+            vertical-align: 2px;
+        }
+
+        #active-tags {
+            text-align: center;
+            margin-left: -10px;
+        }
+
+        .active-tag {
+            display: inline-block;
+            position: relative;
+            background: #aaaaaa;
+            color: white;
+            padding: 4px 34px 4px 8px;
+            margin-top: 20px;
+            margin-left: 10px;
+            font-size: 14px;
+        }
+
+        .active-tag span {
+            /*the cross*/
+            background: #444444;
+            display: inline-block;
+            padding: 3px;
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            cursor: pointer;
+        }
+
+        .rotateRight {
+            transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            /* IE 9 */
+            -webkit-transform: rotate(180deg);
+            /* Safari and Chrome */
+            -o-transform: rotate(180deg);
+            /* Opera */
+            -moz-transform: rotate(180deg);
+            /* Firefox */
+            /* if you want to do this move with animate use transition */
+            transition: .5s;
+            -moz-transition: .5s;
+            /* Firefox 4 */
+            -webkit-transition: .5s;
+            /* Safari and Chrome */
+            -o-transition: .5s;
+            /* Opera */
+        }
+
+        .line {
+            height: 1px;
+            background: #cccccc;
+            margin: 0px 30px;
+        }
+
+        #emptySearchMsg {
+            text-align: center;
+            font-size: 15px;
+            margin-top: 20px;
+        }
+
+        #filters {
+            padding: 20px 60px 12px 22px;
+            overflow: auto;
+        }
+
+        .filter {
+            color: white;
+            padding: 3px 8px;
+            margin: 0px 0px 8px 8px;
+            cursor: pointer;
+            border-radius: 2px;
+            float: left;
+        }
+
+        ul,
+        li {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .list {
+            width: 100%;
+            clear: both;
+        }
+
+        .list li {
+            display: block;
+            float: left;
+            width: 100%;
+        }
+
+        .list li .li-wrapper {
+            background: white;
+            padding-top: 10px;
+            padding-right: 10px;
+            padding-bottom: 10px;
+            margin-left: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0px 0px 3px #dddddd;
+        }
+
+        .list li .li-wrapper:hover {
+            box-shadow: 0px 0px 3px #aaaaaa;
+        }
+
+        .list li a.thumbnail {
+            display: block;
+            position: relative;
+            margin: 0px 0px 10px 10px;
+            cursor: pointer;
+        }
+
+        .list li a.thumbnail .overlay {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            text-align: center;
+        }
+
+        .list li a.thumbnail img {
+            width: 100%;
+        }
+
+        .list li a.thumbnail img.static {
+            width: 100%;
+            position: absolute;
+            top: 0px;
+        }
+
+        .list li a.thumbnail div {
+            width: 100%;
+        }
+
+        .list li a.thumbnail div.static {
+            width: 100%;
+            position: absolute;
+            top: 0px;
+        }
+
+        .list li .info {
+            margin: 0px 0px 0px 10px;
+        }
+
+        .list li .info .indv-viz-control {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .list li .info .indv-viz-control .indv-viz-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #000000;
+            flex: 1;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .list li .info .indv-viz-control .indv-viz-title:hover {
+            color: #999999;
+        }
+
+        .list li .info .indv-viz-control .indv-viz-control-link {
+            transition: filter 0.2s ease;
+        }
+
+        .list li .info .indv-viz-control .indv-viz-control-link:hover {
+            filter: brightness(80%);
+        }
+
+        .list li .info .indv-viz-filters {
+            margin-left: -8px;
+            height: 32px;
+            float: none;
+            display: flex;
+            overflow-y: visible;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .list li .info .indv-viz-filters::-webkit-scrollbar {
+            display: none;
+        }
+
+        #noexist {
+            display: block;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 20px;
+        }
+
+        #topleft {
+            border: 1px solid grey;
+            border-radius: 5px;
+            margin: 10px;
+            padding: 2px;
+            max-height: 200px;
+        }
+
+        #topright {
+            position: absolute;
+            top: 60px;
+            left: 1000px;
+            width: 90px;
+            height: 175px;
+            display: none;
+        }
+
+        #modeselect {
+            position: sticky;
+            margin-top: 30px;
+            height: 25px;
+            width: 175px;
+        }
+
+        #modeselectbutton {
+            height: 25px;
+        }
+
+        /*
+.electure-print {
+  float: right;
+} */
+
+        @media (min-width: 320px) {
+            /* 320-540px */
+            #topleft {
+                top: 20px;
+                /* width: 100%-; /* the - is to take into account the potential vertical scroll bar?, commented on 4 Jan 2022 as it is a CSS error... */
+                position: relative;
+            }
+        }
+
+        @media (min-width: 540px) {
+            /* 540-768px */
+            h1 {
+                font-size: 50px;
+            }
+            .line {
+                margin: 0px 50px;
+            }
+            #filters {
+                padding: 20px 60px 12px 42px;
+            }
+            .list li {
+                width: 50%;
+            }
+        }
+
+        @media (min-width: 768px) {
+            /* 768-1024px */
+            .line {
+                margin: 0px 60px;
+            }
+            #filters {
+                padding: 20px 60px 12px 52px;
+            }
+            .list li {
+                width: 33.33%;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            /* more than 1024px */
+            .list li {
+                width: 25%;
+            }
+            #topleft {
+                top: 40px;
+                width: 25%;
+                position: absolute;
+            }
+        }
+
+        @media (min-width: 1400px) {
+            /* more than 1400px */
+            .list li {
+                width: 20%;
+            }
+        }
+
+        .static {
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            display: inline-block;
+            height: 100%;
+            width: 300px;
+            opacity: 1;
+            backface-visibility: hidden;
+        }
+
+        /*.container {
+  position: relative;
+  width: 50%;
+}
+*/
+
+        /*.image {
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+*/
+
+        .node {
+            fill: #ccc;
+            stroke: #fff;
+            stroke-width: 2px;
+        }
+
+        .link {
+            stroke: #777;
+            stroke-width: 2px;
+        }
+
+        .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 7%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%)
+        }
+
+        .li-wrapper:hover .static {
+            opacity: 0.3;
+        }
+
+        .li-wrapper:hover .middle {
+            opacity: 1;
+        }
+
+        .message {
+            font-size: 150%;
+            text-align: center;
+        }
+
+        #main h2 {
+            font-weight: bold;
+            font-size: large;
+            font-style: normal;
+        }
+
+        #pathway-wrapper {
+            display: inline-block;
+            position: relative;
+            width: 100%;
+            padding-bottom: 120%;
+            vertical-align: top;
+            overflow: hidden;
+        }
+
+        #learning-pathway-svg {
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #change-lang-popup {
+            position: fixed;
+            background: green;
+            left: 40px;
+            top: 50px;
+            width: 250px;
+            height: 100px;
+            border: transparent;
+            border-radius: 10px;
+            padding: 10px 20px;
+        }
+
+        #change-lang-popup p {
+            font-size: medium;
+            color: white;
+            line-height: 2;
+            font-family: "PT Sans", sans-serif;
+        }
+
+        #change-lang-popup-btn {
+            text-decoration: underline;
+            margin-left: 50px;
+        }
+
+        #change-lang-popup-btn:hover {
+            cursor: pointer;
+        }
+    </style>
+    <link rel="alternate" hreflang="en" href="https://visualgo.net">
+    <link rel="alternate" hreflang="zh" href="https://visualgo.net/zh">
+    <link rel="alternate" hreflang="es" href="https://visualgo.net/es">
+    <link rel="alternate" hreflang="pt" href="https://visualgo.net/pt">
+    <link rel="alternate" hreflang="ru" href="https://visualgo.net/ru">
+    <link rel="alternate" hreflang="id" href="https://visualgo.net/id">
+    <link rel="alternate" hreflang="de" href="https://visualgo.net/de">
+    <link rel="alternate" hreflang="bn" href="https://visualgo.net/bn">
+    <link rel="alternate" hreflang="ja" href="https://visualgo.net/ja">
+    <link rel="alternate" hreflang="ko" href="https://visualgo.net/ko">
+    <link rel="alternate" hreflang="vi" href="https://visualgo.net/vi">
+    <style>
+        /* copied here from common.css (perhaps need to use version numbering) until caches worldwide settles */
+
+        #reload-mobile-popup,
+        #message-popup {
+            /* #gdpr-popup, */
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 320px;
+            bottom: 62px;
+            height: 300px;
+            background-color: #0275d8;
+            border-radius: 15px;
+            padding: 30px 40px;
+            z-index: 9500;
+        }
+
+        #reload-mobile-popup {
+            background-color: green;
+            height: 200px;
+        }
+
+        #message-popup {
+            z-index: 9000;
+            width: 40%;
+            height: 130px;
+            background-color: #d9534f;
+        }
+
+        #reload-mobile-popup p,
+        #message-popup p {
+            /* #gdpr-popup p, */
+            font-size: large;
+            color: white;
+            line-height: 2;
+            font-family: "PT Sans", sans-serif;
+        }
+
+        #reload-mobile-popup .inner-button,
+        #message-popup .inner-button {
+            /* #gdpr-popup .gdpr-button, */
+            border: white solid 2px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: x-large;
+            padding: 2px 8px;
+            color: white;
+            width: 90px;
+            text-align: center;
+            position: absolute;
+            letter-spacing: 1px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #gdpr-accept,
+        #reload-mobile-button,
+        #dismiss-message-btn {
+            bottom: 30px;
+            right: 40px;
+        }
+
+        #gdpr-reject,
+        #cancel-reload-mobile-button {
+            bottom: 30px;
+            right: 170px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="body-container" style="display: flex; flex-direction: column; min-height: 100vh;">
+        <style>
+            #topbar {
+                background-color: rgb(0, 0, 0);
+                font-family: "PT Sans", sans-serif;
+                font-size: 13px;
+                height: 40px;
+                padding-left: 40px;
+                padding-right: 40px;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                position: relative;
+                justify-content: flex-start;
+            }
+
+            #topbar a:hover {
+                text-decoration: none;
+            }
+
+            #account-dropdown-btn {
+                color: #198754;
+                font-size: 1rem;
+                padding: 0 0.5rem;
+                margin-left: 0.5rem;
+                border: 2px solid;
+                border-radius: 0.25rem;
+                height: 24px;
+                line-height: 1.5;
+            }
+
+            #account-dropdown-btn:hover {
+                color: #0a58ca !important;
+                border-color: #198754;
+                text-decoration: none;
+            }
+
+            #login-button {
+                color: #ce7c18;
+                font-size: 1rem;
+                padding: 0 0.5rem;
+                margin-left: 0.5rem;
+                border: 2px solid;
+                border-radius: 0.25rem;
+                height: 24px;
+                line-height: 1.5;
+            }
+
+            #login-button a:hover {
+                color: #fefefe !important;
+                text-decoration: none;
+            }
+
+            #account-dropdown-menu {
+                display: none;
+                position: absolute;
+                background-color: white;
+                z-index: 1000;
+                min-width: 10rem;
+                padding: 0.5rem 0;
+                margin: 0;
+                font-size: 1rem;
+                color: rgb(0, 0, 0);
+                text-align: left;
+                list-style: none;
+                background-clip: padding-box;
+                border: 1px solid rgba(0, 0, 0, .15);
+                border-radius: 0.25rem;
+                top: 45px;
+                right: 40px;
+                line-height: 1.5;
+            }
+
+            .account-dropdown-item {
+                display: block;
+                width: auto;
+                padding: 0.25rem 1rem;
+                clear: both;
+                font-weight: 400;
+                color: rgb(0, 0, 0);
+                text-align: inherit;
+                text-decoration: none;
+                white-space: nowrap;
+                background-color: transparent;
+                border: 0;
+                height: 24px;
+                font-family: SilkscreenNormal, sans-serif;
+            }
+
+            .account-dropdown-item:hover {
+                background-color: #e9ecef;
+                color: #0a58ca;
+                text-decoration: none;
+            }
+        </style>
+        <nav id="topbar">
+            <span style="margin-right: 0.25rem">
+
+            <a href="https://github.com/Hugs-4-Bugs" style="font-family: SilkscreenNormal,sans-serif; font-size: 20px; margin-left: 4px;">
+            <!-- <a href="https://visualgo.net" style="font-family: SilkscreenNormal,sans-serif; font-size: 20px; margin-left: 4px;"></a> -->
+<span style="color: white">AlgoBy</span><span class="colour">Prabhat</span>
+</a>
+            <!-- <span style="color: rgb(120, 16, 16)"></span>
+            <select id="Language" class="select2-dropdown" onchange="changeURL()"> -->
+<!-- <option value="en" selected>en</option> -->
+<!-- <option value="zh">zh</option>
+<option value="id">id</option> -->
+</select>
+            </span>
+            <span style="max-height: 30px">
+</span>
+            <span style="max-height: 30px; background-color:rgb(0,0,0)!important; color: white; margin-left: auto">
+</span>
+          <span id="login-button" style="font-family: SilkscreenNormal,sans-serif">
+<a href="https://drive.google.com/drive/folders/1y4W4Svirsp7fZnAwOseYT2NKY5pmEbMo">DSA Materials</a>
+</span>
+        </nav>
+        <ul id="account-dropdown-menu">
+            <li><a class="account-dropdown-item" href="https://visualgo.net/profile">Profile</a></li>
+            <li><a class="account-dropdown-item" href="https://visualgo.net/training">Training</a></li>
+            <li><a class="account-dropdown-item" href="https://visualgo.net/tests">Tests</a></li>
+            <li><a class="account-dropdown-item" href="https://visualgo.net/logout">Log Out</a></li>
+        </ul>
+        <script>
+            function changeURL() {
+                let URL = window.location.href.split('/');
+                URL[3] = document.getElementById("Language").value;
+                window.location.assign(URL.join('/'));
+            }
+
+            function changeDefaultLanguageAndURL() {
+                let URL = window.location.href.split('/');
+                let val = document.getElementById("Language").value;
+                URL[3] = val;
+
+                let data = {
+                    '_token': "BuZiwcA7ZL3UEHfRnz97Eb9ro2zGe5HUjb8Ddbvm",
+                    'lang': val
+                }
+                $.post('https://visualgo.net/changeLanguage', data, function(res, status) {
+                    if (res['status'] === 'success') {
+                        window.location.assign(URL.join('/'));
+                    } else if (res['status'] === 'failed') {
+                        alert(res['message']);
+                    } else {
+                        alert('An unknown error occurred');
+                    }
+                })
+            }
+        </script>
+        <div id="dark-overlay"></div>
+        <div id="main-content-container" style="flex: 1">
+            <h1>AlgorithmBy<span class="colour">Prabhat</span><span style="font-size:25%"></span></h1>
+            <h2 id="subtitle">visualising data structures and algorithms through animation
+            </h2>
+            <form id="searchbar">
+                <input id="search" type="text" autocomplete="off" placeholder="Search...">
+                <div id="show-filters" title="show/hide filters">&#9663;</div>
+            </form>
+            
+            </p>
+            <div id="active-tags"></div>
+            <div id="emptySearchMsg" style="display: none;">No result were found.></div>
+            <div id="filters-and-lines" style="display: none;">
+                <div class="line" style="margin-top: 20px;"></div>
+                <div id="filters"></div>
+                <div class="line"></div>
+            </div>
+            
+            <p hidden id="msg_list0">VisuAlgo is a trilingual site. Try visiting the other versions of VisuAlgo other than the default <a href="./en"><u>English version</u></a>, e.g.,&nbsp;<a href="./zh"><u>Chinese</u></a>&nbsp;or&nbsp;<a href="./id"><u>Indonesian</u></a>. Users
+                can see the <a href="./statistics"><u>translation statistics</u></a> for these three pages. We aim to make all three has near 100% translation rate. Unfortunately the translation progress with other languages are too far behind and they
+                are thus redirected to English.</p>
+            <p hidden id="msg_list1">In VisuAlgo, you can use <i>your own input</i> for any algorithm instead of using only the provided sample inputs. This is one of the key feature of VisuAlgo. Try the graph drawing feature in these 9 graph-related visualizations: <a href="./en/graphds"><u>Graph DS</u></a>,
+                <a href="./en/dfsbfs"><u>DFS/BFS</u></a>, <a href="./en/mst"><u>MST</u></a>, <a href="./en/sssp"><u>SSSP</u></a>, <a href="./en/maxflow"><u>Max Flow</u></a>, <a href="./en/matching"><u>Matching</u></a>, <a href="./en/mvc"><u>MVC</u></a>,
+                <a href="./en/steinertree"><u>Steiner Tree</u></a>, and <a href="./en/TSP"><u>TSP</u></a>. You can also click tag <i>&#39;graph&#39;</i> in any of these 9 graph-related visualization boxes or type in <i>&#39;graph&#39;</i> in the search
+                box.</p>
+            <p hidden id="msg_list2">Here are some of the newer visualization features: ability to show two visualization scales (1.0x and 0.5x), the zoom-out scale is used to show operations of a slightly bigger test cases,&nbsp;<a href="./en/list"><u>/list</u></a> (the linked
+                list are no longer automatically re-layout for most cases to strengthen the O(1) impression of almost all Linked List operations).</p>
+            <p hidden id="msg_list3">Breaking news [Fri, 09 Jun 23]: VisuAlgo project is funded by <a href="https://optiver.com" target="_blank"><u>Optiver</u></a> starting today. We now open VisuAlgo account registration to every Computer Science students/teachers worldwide.
+                Go to the <a href="https://visualgo.net/login"><u>login page</u></a> and follow the on-screen instructions to create a new VisuAlgo account (no longer restricted to &#39;nus.edu&#39;-related emails).</p>
+            <p hidden id="msg_list4">To compare 2 related algorithms, e.g., <a href="./en/mst"><u>Kruskal&#39;s vs Prim&#39;s</u></a> on the same graph, or 2 related operations of the same data structure, e.g., visualizing <a href="./en/heap"><u>Binary (Max) Heap</u></a> as a
+                Binary Tree or as a Compact Array, open 2 VisuAlgo pages in 2 windows and juxtapose them. Click <a href="img/kruskalprim.png" target="_blank"><u>here</u></a> to see the screenshot. This juxtaposition technique can be used anytime you want
+                to compare two similar data structures or algorithms.</p>
+            <p hidden id="msg_list5">You can visualize the recursion tree (or DAG, if there are overlapping subproblems and Dynamic Programming (DP) is applicable) of <b>ANY</b> valid <a href="./en/recursion"><u>recursive function</u></a> that can be written in JavaScript. Click
+                <a href="img/recursion_treedag.png" target="_blank"><u>here</u></a> to see the screenshot. Obviously do not try visualizing recursion with a gigantic recursion tree as doing so will crash your own web browser/computer.</p>
+            <p hidden id="msg_list6">VisuAlgo loads fast for first time visitors (we use Cloudflare global CDN), but it loads &#39;almost instantly&#39; for returning visitors as we also cache lots of static content of VisuAlgo :). So, do not use incognito or private browsing
+                mode to keep the cache. Moreover, for NUS students with VisuAlgo accounts, we will load VisuAlgo according to your preferences/class setup after you <a href="/login"><u>login</u></a>.</p>
+            <p hidden id="msg_list7">Each visualization page has an &#39;e-Lecture Mode&#39; that is accessible from that page&#39;s top right corner. This mode is automatically shown to first time (or non logged-in) visitors to showcase the data structure or algorithm being
+                visualized. The quality of e-Lecture mode for many visualization pages have reached the lecture standard of algorithm classes in National University of Singapore :).</p>
+            <p hidden id="msg_list8">Please check the newest features of VisuAlgo: 1). User accounts system for NUS students and verified CS lecturers worldwide (and also read the latest Privacy Policy popup at the bottom right corner), 2). More mobile-friendly setup, 3). More
+                polished e-Lecture notes to reach "NUS standard", and 4). Trilingual capability (/en, /zh, or /id).</p>
+            <p hidden id="msg_list9">VisuAlgo has two main components: The 24 visualization pages and their associated Online Quiz component (more questions are currently being added into the question bank). We do not script any of the questions in Online Quiz :O and all answers
+                will be graded almost instantly :). You can this online quiz system by clicking the &#39;Training&#39; button on the visualization module.</p>
+            <center>
+                <form method="POST" action="https://visualgo.net/editTemporaryView" class="form-select" id="temp_view_form" style="display: none;">
+                    <input type="hidden" name="_token" value="BuZiwcA7ZL3UEHfRnz97Eb9ro2zGe5HUjb8Ddbvm"> <text>Preferred layout:</text>
+                    <select id="modeselect" name="temp_view">
+<option selected="selected" value="default">Default View</option>
+<option value="CS1010 or equivalent">CS1010 or equivalent</option>
+<option value="IT5003">IT5003</option>
+<option value="CS2040 or equivalent">CS2040 or equivalent</option>
+<option value="CS3230">CS3230</option>
+<option value="CS3233">CS3233</option>
+<option value="CS4234">CS4234</option>
+</select>
+                </form>
+            </center>
+            <div id="main">
+                <ul class="list">
+                    <li id="array" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/array" data-anim="array">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/array.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="arraytext" class="indv-viz-title" href="https://visualgo.net/en/array">Array</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=array">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/array/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">cs1010</span>
+                                    <span class="filter">it5003</span>
+                                    <span class="filter">cs2040</span>
+                                    <span class="filter">cs3230</span>
+                                    <span class="filter">cs3233</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="sorting" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/sorting" data-anim="sorting">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/sorting.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="sortingtext" class="indv-viz-title" href="https://visualgo.net/en/sorting">Sorting</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=sorting">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/sorting/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">array</span>
+                                    <span class="filter">algorithm</span>
+                                    <span class="filter">bubble</span>
+                                    <span class="filter">select</span>
+                                    <span class="filter">insert</span>
+                                    <span class="filter">selection</span>
+                                    <span class="filter">insertion</span>
+                                    <span class="filter">merge</span>
+                                    <span class="filter">quick</span>
+                                    <span class="filter">randomized quick</span>
+                                    <span class="filter">counting</span>
+                                    <span class="filter">radix</span>
+                                    <span class="filter">sort</span>
+                                    <span class="filter">cs1010</span>
+                                    <span class="filter">it5003</span>
+                                    <span class="filter">cs2040</span>
+                                    <span class="filter">cs3230</span>
+                                    <span class="filter">list</span>
+                                    <span class="filter">data structure</span>
+                                    <span class="filter">sorting</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="bitmask" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/bitmask" data-anim="bitmask">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/bitmask.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="bitmasktext" class="indv-viz-title" href="https://visualgo.net/en/bitmask">Bitmask</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=bitmask">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/bitmask/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">bit manipulation</span>
+                                    <span class="filter">set</span>
+                                    <span class="filter">cs3233</span>
+                                    <span class="filter">array</span>
+                                    <span class="filter">list</span>
+                                    <span class="filter">ds</span>
+                                    <span class="filter">data structure</span>
+                                    <span class="filter">bitmask</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="list" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/list" data-anim="list">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/list.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="listtext" class="indv-viz-title" href="https://visualgo.net/en/list">Linked List</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=list">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/list/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">stack</span>
+                                    <span class="filter">queue</span>
+                                    <span class="filter">doubly</span>
+                                    <span class="filter">deque</span>
+                                    <span class="filter">it5003</span>
+                                    <span class="filter">cs2040</span>
+                                    <span class="filter">array</span>
+                                    <span class="filter">ds</span>
+                                    <span class="filter">data structure</span>
+                                    <span class="filter">linked</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="heap" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/heap" data-anim="heap">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/heap.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="heaptext" class="indv-viz-title" href="https://visualgo.net/en/heap">Binary Heap</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=heap">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/heap/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">priority queue</span>
+                                    <span class="filter">recursive</span>
+                                    <span class="filter">it5003</span>
+                                    <span class="filter">cs2040</span>
+                                    <span class="filter">recursion</span>
+                                    <span class="filter">ds</span>
+                                    <span class="filter">data structure</span>
+                                    <span class="filter">binary</span>
+                                    <span class="filter">heap</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="hashtable" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/hashtable" data-anim="hashtable">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/hashtable.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="hashtabletext" class="indv-viz-title" href="https://visualgo.net/en/hashtable">Hash Table</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=hashtable">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/hashtable/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">open addressing</span>
+                                    <span class="filter">linear</span>
+                                    <span class="filter">quadratic</span>
+                                    <span class="filter">probing</span>
+                                    <span class="filter">it5003</span>
+                                    <span class="filter">cs2040</span>
+                                    <span class="filter">ds</span>
+                                    <span class="filter">data structure</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="bst" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/bst" data-anim="bst">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/bst.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="bsttext" class="indv-viz-title" href="https://visualgo.net/en/bst">Binary Search Tree</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=bst">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/bst/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">adelson velskii landis</span>
+                                    <span class="filter">set</span>
+                                    <span class="filter">table</span>
+                                    <span class="filter">avl</span>
+                                    <span class="filter">it5003</span>
+                                    <span class="filter">cs2040</span>
+                                    <span class="filter">recursion</span>
+                                    <span class="filter">recursive</span>
+                                    <span class="filter">ds</span>
+                                    <span class="filter">data structure</span>
+                                    <span class="filter">set</span>
+                                    <span class="filter">bst</span>
+                                    <span class="filter">binary</span>
+                                    <span class="filter">search</span>
+                                    <span class="filter">tree</span>
+                                    <span class="filter">priority</span>
+                                    <span class="filter">queue</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="graphds" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/graphds" data-anim="graphds">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/graphds.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="graphdstext" class="indv-viz-title" href="https://visualgo.net/en/graphds">Graph Structures</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=graphds">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/graphds/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">tree</span>
+                                    <span class="filter">complete</span>
+                                    <span class="filter">bipartite</span>
+                                    <span class="filter">dag</span>
+                                    <span class="filter">it5003</span>
+                                    <span class="filter">cs2040</span>
+                                    <span class="filter">graph</span>
+                                    <span class="filter">ds</span>
+                                    <span class="filter">data structure</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="ufds" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/ufds" data-anim="ufds">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/ufds.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="ufdstext" class="indv-viz-title" href="https://visualgo.net/en/ufds">Union-Find DS</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=ufds">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/ufds/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">path compression</span>
+                                    <span class="filter">disjoint</span>
+                                    <span class="filter">set</span>
+                                    <span class="filter">data structure</span>
+                                    <span class="filter">union by rank</span>
+                                    <span class="filter">cs2040</span>
+                                    <span class="filter">cs3233</span>
+                                    <span class="filter">array</span>
+                                    <span class="filter">tree</span>
+                                    <span class="filter">find</span>
+                                    <span class="filter">ds</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="fenwicktree" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231)e;">
+                            <a class="thumbnail" href="https://visualgo.net/en/fenwicktree" data-anim="fenwicktree">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/fenwicktree.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="fenwicktreetext" class="indv-viz-title" href="https://visualgo.net/en/fenwicktree">Fenwick Tree</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=fenwicktree">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/fenwicktree/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">binary indexed tree</span>
+                                    <span class="filter">bit</span>
+                                    <span class="filter">dynamic</span>
+                                    <span class="filter">fenwick</span>
+                                    <span class="filter">range</span>
+                                    <span class="filter">sum</span>
+                                    <span class="filter">point</span>
+                                    <span class="filter">update</span>
+                                    <span class="filter">cs3233</span>
+                                    <span class="filter">binary</span>
+                                    <span class="filter">ds</span>
+                                    <span class="filter">data structure</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="segmenttree" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/segmenttree" data-anim="segmenttree">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/segmenttree.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="segmenttreetext" class="indv-viz-title" href="https://visualgo.net/en/segmenttree">Segment Tree</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=segmenttree">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/segmenttree/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">dynamic</span>
+                                    <span class="filter">range</span>
+                                    <span class="filter">sum</span>
+                                    <span class="filter">min</span>
+                                    <span class="filter">max</span>
+                                    <span class="filter">cs3233</span>
+                                    <span class="filter">segment</span>
+                                    <span class="filter">tree</span>
+                                    <span class="filter">ds</span>
+                                    <span class="filter">data structure</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="recursion" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/recursion" data-anim="recursion">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/recursion.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="recursiontext" class="indv-viz-title" href="https://visualgo.net/en/recursion">Recursion Tree/DAG</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=recursion">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/recursion/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">dynamic programming</span>
+                                    <span class="filter">dp</span>
+                                    <span class="filter">generic</span>
+                                    <span class="filter">cs1010</span>
+                                    <span class="filter">it5003</span>
+                                    <span class="filter">cs2040</span>
+                                    <span class="filter">cs3233</span>
+                                    <span class="filter">cs4234</span>
+                                    <span class="filter">recursive</span>
+                                    <span class="filter">algorithm</span>
+                                    <span class="filter">recursion</span>
+                                    <span class="filter">tree</span>
+                                    <span class="filter">dag</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="dfsbfs" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/dfsbfs" data-anim="dfsbfs">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/dfsbfs.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="dfsbfstext" class="indv-viz-title" href="https://visualgo.net/en/dfsbfs">Graph Traversal</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=dfsbfs">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/dfsbfs/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">bfs</span>
+                                    <span class="filter">dfs</span>
+                                    <span class="filter">it5003</span>
+                                    <span class="filter">cs2040</span>
+                                    <span class="filter">bipartite</span>
+                                    <span class="filter">scc</span>
+                                    <span class="filter">cut vertex</span>
+                                    <span class="filter">articulation point</span>
+                                    <span class="filter">bridge</span>
+                                    <span class="filter">cs2020</span>
+                                    <span class="filter">graph</span>
+                                    <span class="filter">algorithm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="mst" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/mst" data-anim="mst">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/mst.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="msttext" class="indv-viz-title" href="https://visualgo.net/en/mst">Min Spanning Tree</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=mst">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/mst/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">mst</span>
+                                    <span class="filter">prim</span>
+                                    <span class="filter">kruskal</span>
+                                    <span class="filter">graph</span>
+                                    <span class="filter">min</span>
+                                    <span class="filter">spanning</span>
+                                    <span class="filter">cs2040</span>
+                                    <span class="filter">tree</span>
+                                    <span class="filter">algorithm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="sssp" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/sssp" data-anim="sssp">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/sssp.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="sssptext" class="indv-viz-title" href="https://visualgo.net/en/sssp">SS Shortest Paths</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=sssp">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/sssp/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">sssp</span>
+                                    <span class="filter">single-source</span>
+                                    <span class="filter">bfs</span>
+                                    <span class="filter">dijkstra</span>
+                                    <span class="filter">bellman ford</span>
+                                    <span class="filter">it5003</span>
+                                    <span class="filter">cs2040</span>
+                                    <span class="filter">single source</span>
+                                    <span class="filter">shortest path</span>
+                                    <span class="filter">graph</span>
+                                    <span class="filter">algorithm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="cyclefinding" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/cyclefinding" data-anim="cyclefinding">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/cyclefinding.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="cyclefindingtext" class="indv-viz-title" href="https://visualgo.net/en/cyclefinding">Cycle Finding</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=cyclefinding">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/cyclefinding/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">floyd</span>
+                                    <span class="filter">tortoise-hare</span>
+                                    <span class="filter">math</span>
+                                    <span class="filter">cs3233</span>
+                                    <span class="filter">algorithm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="suffixtree" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/suffixtree" data-anim="suffixtree">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/suffixtree.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="suffixtreetext" class="indv-viz-title" href="https://visualgo.net/en/suffixtree">Suffix Tree</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=suffixtree">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/suffixtree/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">string</span>
+                                    <span class="filter">matching</span>
+                                    <span class="filter">lrs</span>
+                                    <span class="filter">lcs</span>
+                                    <span class="filter">cs3233</span>
+                                    <span class="filter">suffix</span>
+                                    <span class="filter">tree</span>
+                                    <span class="filter">ds</span>
+                                    <span class="filter">data structure</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="suffixarray" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/suffixarray" data-anim="suffixarray">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/suffixarray.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="suffixarraytext" class="indv-viz-title" href="https://visualgo.net/en/suffixarray">Suffix Array</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=suffixarray">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/suffixarray/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">lcp</span>
+                                    <span class="filter">cs3233</span>
+                                    <span class="filter">matching</span>
+                                    <span class="filter">lrs</span>
+                                    <span class="filter">lcs</span>
+                                    <span class="filter">suffix</span>
+                                    <span class="filter">array</span>
+                                    <span class="filter">string</span>
+                                    <span class="filter">ds</span>
+                                    <span class="filter">data structure</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="polygon" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/polygon" data-anim="polygon">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/polygon.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="polygontext" class="indv-viz-title" href="https://visualgo.net/en/polygon">Geometry (Polygon)</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=polygon">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/polygon/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">convex</span>
+                                    <span class="filter">cut</span>
+                                    <span class="filter">winding</span>
+                                    <span class="filter">concave</span>
+                                    <span class="filter">cs3233</span>
+                                    <span class="filter">computational</span>
+                                    <span class="filter">geometry</span>
+                                    <span class="filter">algorithm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="convexhull" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/convexhull" data-anim="convexhull">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/convexhull.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="convexhulltext" class="indv-viz-title" href="https://visualgo.net/en/convexhull">Convex Hull</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=convexhull">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/convexhull/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">andrew</span>
+                                    <span class="filter">monotone chain</span>
+                                    <span class="filter">graham</span>
+                                    <span class="filter">scan</span>
+                                    <span class="filter">jarvis</span>
+                                    <span class="filter">march</span>
+                                    <span class="filter">cs3233</span>
+                                    <span class="filter">computational</span>
+                                    <span class="filter">geometry</span>
+                                    <span class="filter">algorithm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="maxflow" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/maxflow" data-anim="maxflow">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/maxflow.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="maxflowtext" class="indv-viz-title" href="https://visualgo.net/en/maxflow">Network Flow</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=maxflow">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/maxflow/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">max flow</span>
+                                    <span class="filter">edmonds karp</span>
+                                    <span class="filter">min cut</span>
+                                    <span class="filter">dinic</span>
+                                    <span class="filter">ford fulkerson</span>
+                                    <span class="filter">graph</span>
+                                    <span class="filter">cs3233</span>
+                                    <span class="filter">cs4234</span>
+                                    <span class="filter">algorithm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="matching" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/matching" data-anim="matching">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/matching.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="matchingtext" class="indv-viz-title" href="https://visualgo.net/en/matching">Graph Matching</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=matching">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/matching/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">augmenting path</span>
+                                    <span class="filter">bipartite</span>
+                                    <span class="filter">graph</span>
+                                    <span class="filter">cs3233</span>
+                                    <span class="filter">cs4234</span>
+                                    <span class="filter">matching</span>
+                                    <span class="filter">algorithm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="mvc" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/mvc" data-anim="mvc">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/mvc.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="mvctext" class="indv-viz-title" href="https://visualgo.net/en/mvc">Min Vertex Cover</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=mvc">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/mvc/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">np-hard</span>
+                                    <span class="filter">graph</span>
+                                    <span class="filter">bipartite</span>
+                                    <span class="filter">tree</span>
+                                    <span class="filter">tree</span>
+                                    <span class="filter">dp</span>
+                                    <span class="filter">bipartite</span>
+                                    <span class="filter">matching</span>
+                                    <span class="filter">max flow</span>
+                                    <span class="filter">cs3233</span>
+                                    <span class="filter">cs4234</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="steinertree" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/steinertree" data-anim="steinertree">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/steinertree.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="steinertreetext" class="indv-viz-title" href="https://visualgo.net/en/steinertree">Steiner Tree</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=steinertree">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/steinertree/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">np-hard</span>
+                                    <span class="filter">graph</span>
+                                    <span class="filter">mst</span>
+                                    <span class="filter">cs4234</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="tsp" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/tsp" data-anim="tsp">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/tsp.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="tsptext" class="indv-viz-title" href="https://visualgo.net/en/tsp">Traveling Salesman Problem</a>
+                                    <a class="links indv-viz-control-link" href="/training?diff=Medium&n=7&tl=0&module=tsp">Training</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/tsp/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">np-hard</span>
+                                    <span class="filter">graph</span>
+                                    <span class="filter">dp</span>
+                                    <span class="filter">mst</span>
+                                    <span class="filter">cs3233</span>
+                                    <span class="filter">cs4234</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="reductions" class="viz">
+                        <div class="li-wrapper" style="background-color: rgb(64, 189, 231);">
+                            <a class="thumbnail" href="https://visualgo.net/en/reductions" data-anim="reductions">
+<img src="https://visualgo.net/img/dummy.gif" alt="please wait">
+<div class="static" style="background-image: url('/visualgo.net/img/png/reductions.png');"></div>
+<div class="middle">
+<div class="message">Click to View</div>
+</div>
+</a>
+                            <div class="info">
+                                <div class="indv-viz-control">
+                                    <a id="reductionstext" class="indv-viz-title" href="https://visualgo.net/en/reductions">NP-complete Reductions</a>
+                                    <div class="electure-print links indv-viz-control-link" title="Print the e-Lecture notes"><a target="_blank" href="/en/reductions/print">&#9997;</a></div>
+                                </div>
+                                <div class="indv-viz-filters">
+                                    <span class="filter">cs3230</span>
+                                    <span class="filter">cs4234</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div id="reload-mobile-popup" hidden>
+                <p>Reload screen or rotate device for a pathway suiting your device orientation</p>
+                <a id="reload-mobile-button" class="inner-button">Reload</a>
+                <a id="cancel-reload-mobile-button" class="inner-button">Cancel</a>
+            </div>
+        </div>
+
+        <div id="bottom-bar">
+            <a id="scale" style="display: none;">1.0x</a>
+            <a id="trigger-about">About</a>
+            <a id="trigger-terms">Terms of use</a>
+            <a id="trigger-privacy">Privacy Policy</a>
+        </div>
+        <div id="about" class="overlays">
+            <h4>About</h4><span class="close-overlay">&#x2715;</span>
+            <div class="content">
+                <p>This platform is designed to simplify the learning of complex data structures and algorithms through engaging and interactive visualizations. It covers a wide range of fundamental and advanced topics in computer science, providing users with an intuitive way to grasp intricate concepts.</p>
+                <p>The visualizations demonstrate how different algorithms and data structures operate internally, helping users understand their mechanics and applications through clear, step-by-step graphical representations. Whether you're a student, a coding enthusiast, or a professional preparing for interviews, this platform serves as a valuable resource for mastering essential topics.</p>   
+                <h3>Key Topics Covered:</h3>   
+                <p><strong>Data Structures</strong>: Array, Linked List (LL), Binary Heap, Hash Table, Binary Search Tree (BST), Graph Data Structure, Union-Find Data Structure, Fenwick Tree, Segment Tree, Suffix Tree, Suffix Array.</p>
+                <p><strong>Algorithmic Concepts</strong>: Sorting, Bitmasking, Recursion Tree, Directed Acyclic Graph (DAG), Graph Traversal, Minimum Spanning Tree, Single-Source Shortest Path (SSSP), Cycle Finding, Geometry (Polygon, Convex Hull).</p>
+                <p><strong>Advanced Topics</strong>: Network Flow, Graph Matching, Minimum Vertex Cover, Steiner Tree, Travelling Salesman, Nondeterministic Polynomial (NP) Complete Reduction.</p>
+                <p>The platform allows users to see how each of these data structures and algorithms behaves in real-time, offering a hands-on learning experience. Whether you're dealing with graph algorithms, dynamic programming, or optimization problems, the visualizations will help demystify these topics by breaking them down into manageable, clear animations.</p>
+
+    
+            <br>   
+                <h2>
+                    <strong>
+                        <p>Advantages of the Platform:</p>
+                    </strong>
+                </h2>
+    <ul>
+        <li><strong>Interactive Learning</strong>: Engage with algorithms visually, breaking down complex processes into understandable steps.</li>
+        <li><strong>Comprehensive Coverage</strong>: From basic data structures to advanced algorithms, the platform offers a broad range of topics to explore.</li>
+        <li><strong>Self-Paced Exploration</strong>: Learn at your own pace, revisiting topics as needed with easy-to-follow visualizations.</li>
+        <li><strong>Practice-Oriented</strong>: Ideal for preparing for coding interviews, contests, or deepening your understanding of algorithms and data structures.</li>
+        <li><strong>Free and Accessible</strong>: Available to anyone, anywhere, with no login required, making it a versatile tool for learners and professionals alike.</li>
+    </ul>
+      </div>
+    </div>
+        <div id="termsofuse" class="overlays">
+            <h4>Terms of use</h4><span class="close-overlay">&#x2715;</span>
+            <div class="content">
+                <div class="content">
+                    <p><strong>AlgoByPrabhat</strong> is generously offered at no cost to the global Computer Science community. If you appreciate <strong>AlgoByPrabhat</strong>, we kindly request that you <b>spread the word about its existence to fellow Computer Science students and instructors</b>. 
+                       You can share <strong>AlgoByPrabhat</strong> through social media platforms (e.g., Facebook, YouTube, Instagram, TikTok, Twitter, etc.), course webpages, blog reviews, emails, and more.</p>
+                    
+                    <p>Data Structures and Algorithms (DSA) students and instructors are welcome to use this website directly for their classes. If you capture screenshots or videos from this site, feel free to use them elsewhere, provided that you cite the 
+                       URL of this website <strong>(<a href="https://your-website-url">https://your-website-url</a>)</strong> and/or the list of publications below as references. However, please refrain from downloading <strong>AlgoByPrabhat's</strong> client-side files and hosting them on your website,
+                       as this constitutes plagiarism. At this time, we do not permit others to fork this project or create <stromg>AlgoByPrabhat</strong> variants. Personal use of an offline copy of the client-side <strong>AlgoByPrabhat</strong> is acceptable.</p>
+                    
+                    <p>Please note that <strong>AlgoByPrabhat's</strong> online quiz component has a substantial server-side element, and it is not easy to save server-side scripts and databases locally. Currently, the general public can access the online quiz system only through
+                       the 'training mode.' The 'test mode' offers a more controlled environment for using randomly generated questions and automatic verification in real examinations.</p>
+                    <p><strong><span style="line-height: 200%;">Bug Reports or Request for New Features</span></strong></p>
+                    <p><strong>AlgoByPrabhat</strong> is not a finished project. If you are using <strong>AlgoByPrabhat</strong> and spot a bug in any of our visualization pages or online quiz tools, or if you want to request new features, please contact the development team via email at 
+                       <strong><a href="mailto:Prabhatkumarssm72@gmail.com">Prabhatkumarssm72@gmail.com</a></strong>.</p>
+                </div>
+                            </div>
+            </div>
+        <div id="privacy-policy" class="overlays">
+            <h4>Privacy Policy</h4><span class="close-overlay">&#x2715;</span>
+            <div class="content">
+                <p><b>Version 1.2 (Updated Mon, 14 Oct 2024).</b></p>
+                <p>Since Mon, 14 Oct 2024, we no longer use Google Analytics. Thus, all cookies that we use now are solely for the operations of this website. The annoying cookie-consent popup is now turned off even for first-time visitors.</p>
+                
+                <p>Anyone can use <strong>AlgoByPrabhat</strong> without needing to create an account or credentials. The platform is designed to be accessible for all users right from the start. This website is completely free, and anyone can access it without signing up.</p>
+            
+                <p>Your privacy is important to us. When using <strong>AlgoByPrabhat</strong>, you can explore various algorithms and data structures without any personal information being collected. There’s no need for you to provide any identifiable data to engage with the site.</p>
+            
+                <p>If you wish to store customization settings <b><em>(e.g., layout mode, default language, playback speed, etc.)</em></b>, you can create an account (a tuple of your official email address, display name, and a password that is encrypted on the server side — no other personal data is stored). Your account will allow you to save your preferences and track your online quiz progress.</p>
+            
+                <p>However, there is no need to create an account to use <strong>AlgoByPrabhat</strong>; users can fully engage with the platform without signing up. Your experience on the website will remain the same whether or not you choose to create an account.</p>
+            
+                <p>By using <strong>AlgoByPrabhat</strong>, you agree to our privacy policy, which ensures that your data remains secure and private. We do not share or sell any personal information, and you have the option to delete your account at any time if you choose to create one.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/d3-force-boundary@0.0.1/dist/d3-force-boundary.min.js"></script>
+    <script>
+        $(function() {
+            // overlays stuffs
+            $('#trigger-about').click(function() {
+                if ($(window).width() > 600) {
+                    $('#dark-overlay').fadeIn(function() {
+                        $('#about').fadeIn();
+                    });
+                } else
+                    alert('Sorry, this dialog is too big. Please load it on bigger screen');
+            });
+
+            $('#trigger-team').click(function() {
+                if ($(window).width() > 600) {
+                    $('#dark-overlay').fadeIn(function() {
+                        $('#team').fadeIn();
+                    });
+                } else
+                    alert('Sorry, this dialog is too big. Please load it on bigger screen');
+            });
+
+            $('#trigger-terms').click(function() {
+                if ($(window).width() > 600) {
+                    $('#dark-overlay').fadeIn(function() {
+                        $('#termsofuse').fadeIn();
+                    });
+                } else
+                    alert('Sorry, this dialog is too big. Please load it on bigger screen');
+            });
+
+            $('#trigger-privacy').click(function() {
+                if ($(window).width() > 600) {
+                    $('#dark-overlay').fadeIn(function() {
+                        $('#privacy-policy').fadeIn();
+                    });
+                } else
+                    alert('Sorry, this dialog is too big. Please load it on bigger screen');
+            })
+
+            $('.close-overlay').click(function() {
+                $('.overlays').fadeOut(function() {
+                    $('#dark-overlay').fadeOut();
+                });
+            });
+
+            $('#dark-overlay').click(function() {
+                $('.overlays').fadeOut();
+                $('#dark-overlay').fadeOut();
+                if (typeof GeometryWidget !== 'undefined') {
+                    GeometryWidget.stopLoop();
+                }
+            });
+        })
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-1566631-4"></script>
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': "BuZiwcA7ZL3UEHfRnz97Eb9ro2zGe5HUjb8Ddbvm"
+            }
+        });
+
+        // handles account dropdown menu
+        $(function() {
+            $('#language-dropdown-btn').click(function(e) {
+                $('#language-dropdown-menu').css('display', 'block');
+                $('#account-dropdown-menu').css('display', 'none')
+                e.stopPropagation()
+            })
+            $(document).click(function() {
+                $('#language-dropdown-menu').css('display', 'none')
+            })
+        })
+
+        $(function() {
+            $('#account-dropdown-btn').click(function(e) {
+                $('#account-dropdown-menu').css('display', 'block')
+                $('#language-dropdown-menu').css('display', 'none')
+                e.stopPropagation()
+            })
+            $(document).click(function(e) {
+                $('#account-dropdown-menu').css('display', 'none')
+            })
+        })
+
+        // surprise colour!
+        // Referenced to in  home.js and viz.js also
+        var colourArray = ["#52bc69", "#d65775" /*"#ed5a7d"*/ , "#2ebbd1", "#d9513c", "#fec515", "#4b65ba", "#ff8a27", "#a7d41e"]; // green, pink, blue, red, yellow, indigo, orange, lime
+
+        function disableScroll() {
+            $('html').css('overflow', 'hidden');
+        }
+
+        function enableScroll() {
+            $('html').css('overflow', 'visible');
+        }
+
+        function replaceAll(find, replace, str) {
+            return str.replace(new RegExp(find, 'g'), replace);
+        }
+
+        function getColours() {
+            var generatedColours = new Array();
+            while (generatedColours.length < 4) {
+                var n = (Math.floor(Math.random() * colourArray.length));
+                if ($.inArray(n, generatedColours) == -1)
+                    generatedColours.push(n);
+            }
+            return generatedColours;
+        }
+
+        function isOn(value, position) {
+            return (value >> position) & 1 === 1;
+        }
+
+        function customAlert(msg) {
+            $('#custom-alert p').html(msg);
+            var m = -1 * ($('#custom-alert').outerHeight() / 2);
+            $('#custom-alert').css('margin-top', m + 'px');
+            $('#dark-overlay').fadeIn(function() {
+                $('#custom-alert').fadeIn(function() {
+                    setTimeout(function() {
+                        $('#custom-alert').fadeOut(function() {
+                            $('#dark-overlay').fadeOut();
+                        });
+                    }, 1000);
+                });
+            });
+        }
+
+        function showLoadingScreen() {
+            $('#loading-overlay').show();
+            $('#loading-message').show();
+        }
+
+        function hideLoadingScreen() {
+            $('#loading-overlay').hide();
+        }
+
+        function commonAction(retval, msg) {
+            if (retval) {
+                $('#current-action').show();
+                $('#current-action').html(mode == "exploration" ? msg : ("e-Lecture Example (auto play until done)<br>" + msg));
+                $('#progress-bar').slider("option", "max", gw.getTotalIteration() - 1);
+                triggerRightPanels();
+                isPlaying = true;
+            }
+        }
+
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; ++i) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable)
+                    return decodeURIComponent(pair[1]);
+            }
+            return "";
+        }
+
+        const MOBILE_WIDTH = 1000;
+        const matchMediaMobile = window.matchMedia(`only screen and (max-width: ${MOBILE_WIDTH}px)`);
+        const matchMediaNarrow = window.matchMedia(`only screen and (max-width: 500px)`);
+
+        function isMobile() {
+            return matchMediaMobile.matches;
+        }
+        //To fix the issue of a narrow desktop window being asked to rotate, I am now checking for it based on the navigator.userAgent to see if its mobile or not.
+        //This may change in the future if browsers decide to change the naming of userAgent for mobile browsers so may need to keep an eye on this.
+        function isMobileOS() {
+            return /Mobi/i.test(navigator.userAgent) && !/ipad/i.test(navigator.userAgent);
+        }
+        let portraitMatcher = window.matchMedia("(orientation:portrait)");
+
+        function isPortrait() {
+            return portraitMatcher.matches;
+        }
+
+        var generatedColours = getColours();
+        var surpriseColour = colourArray[generatedColours[0]];
+        var colourTheSecond = colourArray[generatedColours[1]];
+        var colourTheThird = colourArray[generatedColours[2]];
+        var colourTheFourth = colourArray[generatedColours[3]];
+
+        $(function() {
+            $('.links').css('background', surpriseColour);
+            $('.colour').css("color", surpriseColour);
+            $('h4').css("background-color", surpriseColour); // about, contact us etc. button background
+
+            // title
+            $('#title a').click(function() {
+                $('#title a').removeClass('selected-viz');
+                $(this).addClass('selected-viz');
+            });
+        });
+
+        
+        /*
+              // the sunset-ed GA, commented on 26 Jun 2023, and Prof Halim doesn't bother to use anymore
+              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        */
+
+        // function setCookie(cname, cvalue, exdays) {
+        //   const d = new Date();
+        //   d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        //   let expires = "expires="+ d.toUTCString();
+        //   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        // }
+
+        //       //         $(function() {
+        //           $('#gdpr-accept').click(function () {
+        // /*
+        //             // added on 26 Jun 2023
+        //             window.dataLayer = window.dataLayer || [];
+        //             function gtag(){dataLayer.push(arguments);}
+        //             gtag('js', new Date());
+
+        //             gtag('config', 'UA-1566631-4');
+        // */
+        // //            ga('create', 'UA-1566631-4', 'auto');
+        // //            ga('send', 'pageview');
+        //             setCookie('use_google_analytics', 'true', 365)
+        //             $('#gdpr-popup').hide()
+        //           });
+        //           $('#gdpr-reject').click(function () {
+        //             setCookie('use_google_analytics', 'false', 365)
+        //             $('#gdpr-popup').hide()
+        //           });
+        //         });
+        //       
+        $('#gdpr-privacy-policy').click(function() {
+            if ($(window).width() > 600) {
+                $('#dark-overlay').fadeIn(function() {
+                    $('#privacy-policy').fadeIn();
+                });
+            } else
+                alert('Sorry, this dialog is too big. Please load it on bigger screen');
+        })
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.3.0/d3.min.js" integrity="sha512-NMhzM2RHzbCRO0s5VPaRC+2bW6nmNXimzC9p5sp2x19M+zzuSJ2T50dEQ7hpHkNjnX1mt8nQg1NNthwRZgsoIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/d3-force-boundary@0.0.1/dist/d3-force-boundary.min.js"></script>
+    <script>
+        document.getElementById('modeselect').addEventListener('change', function() {
+            document.getElementById('temp_view_form').submit();
+        });
+
+        var seen = 0; // all have not been seen
+        var timer;
+
+        function nextTip() { // note to self: now I think I can increase the number of tips...
+            if (seen == (1 << 12) - 1) seen = 0;
+
+            var cur;
+            do {
+                cur = Math.floor(Math.random() * 12);
+            }
+            while ((seen & (1 << cur)) != 0);
+
+            seen |= (1 << cur);
+            $("#msg").html($("#msg_list" + cur).html()).fadeIn();
+            clearTimeout(timer); // reset timer
+            timer = setTimeout(function() {
+                $("#msg").fadeOut(200, nextTip); // auto-rotate tip per 15s (current total before cycle 2m30s, 11 tips so far)
+            }, 15000);
+        }
+
+        $(function() {
+            function showhide() {
+                if ($(window).width() < 700) {
+                    $("#subtitle").html("this tool looks better on larger screen :)");
+                    $("#topright").hide();
+                } else {
+                    $("#subtitle").html("visualising data structures and algorithms through animation");
+                    $("#topright").css("left", $(window).width() - 190); // always on the right
+                    $("#topright").show();
+                }
+            }
+
+            $(window).resize(function() {
+                showhide();
+            });
+            showhide();
+
+            $(function() {
+                $(this).children('img').attr('width', $(this).children('div.static').css('width'));
+                $(this).children('img').attr('height', $(this).children('div.static').css('height'));
+            });
+
+            $("#msg").html($("#msg_list1").html()).fadeIn(); // to avoid blank case (not sure about racing condition)
+            //nextTip();
+            setTimeout(function() {
+                $("#msg").fadeOut(200, nextTip);
+            }, 200); // load first msg 200ms after page load
+
+            // thumbnail image animation on hover
+            $('a.thumbnail').hover(function() {
+                $(this).children('img').attr('src', window.location.origin + '/img/gif/' + $(this).attr('data-anim') + '.gif');
+                $(this).children('div.static').hide();
+            }, function() {
+                $(this).children('div.static').show();
+            });
+
+            $('a.thumbnail').hover(function() {
+                $(this).children('image').attr('href', 'img/gif/' + $(this).attr('data-anim') + '.gif');
+                $(this).children('image').attr('width', $(this).children('g.static').children('image').css('width'));
+                $(this).children('image').attr('height', $(this).children('g.static').children('image').css('height'));
+                $(this).children('g.static').hide();
+            }, function() {
+                $(this).children('g.static').show();
+            });
+
+            $('a.thumbnail').hover(function() {
+                $(this).children('text').show()
+            }, function() {
+                $(this).children('text').fadeOut('fast')
+            })
+
+            // tags
+            var allViz = new Array(
+                new Array(
+                    'array',
+                    'array',
+                    'cs1010',
+                    'it5003',
+                    'cs2040',
+                    'cs3230',
+                    'cs3233'
+                ),
+                new Array(
+                    'sorting',
+                    'sorting',
+                    'array',
+                    'algorithm',
+                    'bubble',
+                    'select',
+                    'insert',
+                    'selection',
+                    'insertion',
+                    'merge',
+                    'quick',
+                    'randomized quick',
+                    'counting',
+                    'radix',
+                    'sort',
+                    'cs1010',
+                    'it5003',
+                    'cs2040',
+                    'cs3230',
+                    'list',
+                    'data structure',
+                    'sorting'
+                ),
+                new Array(
+                    'bitmask',
+                    'bitmask',
+                    'bit manipulation',
+                    'set',
+                    'cs3233',
+                    'array',
+                    'list',
+                    'ds',
+                    'data structure',
+                    'bitmask'
+                ),
+                new Array(
+                    'list',
+                    'linked list',
+                    'stack',
+                    'queue',
+                    'doubly',
+                    'deque',
+                    'it5003',
+                    'cs2040',
+                    'array',
+                    'ds',
+                    'data structure',
+                    'linked'
+                ),
+                new Array(
+                    'heap',
+                    'binary heap',
+                    'priority queue',
+                    'recursive',
+                    'it5003',
+                    'cs2040',
+                    'recursion',
+                    'ds',
+                    'data structure',
+                    'binary',
+                    'heap'
+                ),
+                new Array(
+                    'hashtable',
+                    'hash table',
+                    'open addressing',
+                    'linear',
+                    'quadratic',
+                    'probing',
+                    'it5003',
+                    'cs2040',
+                    'ds',
+                    'data structure'
+                ),
+                new Array(
+                    'bst',
+                    'binary search tree',
+                    'adelson velskii landis',
+                    'set',
+                    'table',
+                    'avl',
+                    'it5003',
+                    'cs2040',
+                    'recursion',
+                    'recursive',
+                    'ds',
+                    'data structure',
+                    'set',
+                    'bst',
+                    'binary',
+                    'search',
+                    'tree',
+                    'priority',
+                    'queue'
+                ),
+                new Array(
+                    'graphds',
+                    'graph structures',
+                    'tree',
+                    'complete',
+                    'bipartite',
+                    'dag',
+                    'it5003',
+                    'cs2040',
+                    'graph',
+                    'ds',
+                    'data structure'
+                ),
+                new Array(
+                    'ufds',
+                    'union-find ds',
+                    'path compression',
+                    'disjoint',
+                    'set',
+                    'data structure',
+                    'union by rank',
+                    'cs2040',
+                    'cs3233',
+                    'array',
+                    'tree',
+                    'find',
+                    'ds'
+                ),
+                new Array(
+                    'fenwicktree',
+                    'fenwick tree',
+                    'binary indexed tree',
+                    'bit',
+                    'dynamic',
+                    'fenwick',
+                    'range',
+                    'sum',
+                    'point',
+                    'update',
+                    'cs3233',
+                    'binary',
+                    'ds',
+                    'data structure'
+                ),
+                new Array(
+                    'segmenttree',
+                    'segment tree',
+                    'dynamic',
+                    'range',
+                    'sum',
+                    'min',
+                    'max',
+                    'cs3233',
+                    'segment',
+                    'tree',
+                    'ds',
+                    'data structure'
+                ),
+                new Array(
+                    'recursion',
+                    'recursion tree/dag',
+                    'dynamic programming',
+                    'dp',
+                    'generic',
+                    'cs1010',
+                    'it5003',
+                    'cs2040',
+                    'cs3233',
+                    'cs4234',
+                    'recursive',
+                    'algorithm',
+                    'recursion',
+                    'tree',
+                    'dag'
+                ),
+                new Array(
+                    'dfsbfs',
+                    'graph traversal',
+                    'bfs',
+                    'dfs',
+                    'it5003',
+                    'cs2040',
+                    'bipartite',
+                    'scc',
+                    'cut vertex',
+                    'articulation point',
+                    'bridge',
+                    'cs2020',
+                    'graph',
+                    'algorithm'
+                ),
+                new Array(
+                    'mst',
+                    'min spanning tree',
+                    'mst',
+                    'prim',
+                    'kruskal',
+                    'graph',
+                    'min',
+                    'spanning',
+                    'cs2040',
+                    'tree',
+                    'algorithm'
+                ),
+                new Array(
+                    'sssp',
+                    'ss shortest paths',
+                    'sssp',
+                    'single-source',
+                    'bfs',
+                    'dijkstra',
+                    'bellman ford',
+                    'it5003',
+                    'cs2040',
+                    'single source',
+                    'shortest path',
+                    'graph',
+                    'algorithm'
+                ),
+                new Array(
+                    'cyclefinding',
+                    'cycle finding',
+                    'floyd',
+                    'tortoise-hare',
+                    'math',
+                    'cs3233',
+                    'algorithm'
+                ),
+                new Array(
+                    'suffixtree',
+                    'suffix tree',
+                    'string',
+                    'matching',
+                    'lrs',
+                    'lcs',
+                    'cs3233',
+                    'suffix',
+                    'tree',
+                    'ds',
+                    'data structure'
+                ),
+                new Array(
+                    'suffixarray',
+                    'suffix array',
+                    'lcp',
+                    'cs3233',
+                    'matching',
+                    'lrs',
+                    'lcs',
+                    'suffix',
+                    'array',
+                    'string',
+                    'ds',
+                    'data structure'
+                ),
+                new Array(
+                    'polygon',
+                    'geometry (polygon)',
+                    'convex',
+                    'cut',
+                    'winding',
+                    'concave',
+                    'cs3233',
+                    'computational',
+                    'geometry',
+                    'algorithm'
+                ),
+                new Array(
+                    'convexhull',
+                    'convex hull',
+                    'andrew',
+                    'monotone chain',
+                    'graham',
+                    'scan',
+                    'jarvis',
+                    'march',
+                    'cs3233',
+                    'computational',
+                    'geometry',
+                    'algorithm'
+                ),
+                new Array(
+                    'maxflow',
+                    'network flow',
+                    'max flow',
+                    'edmonds karp',
+                    'min cut',
+                    'dinic',
+                    'ford fulkerson',
+                    'graph',
+                    'cs3233',
+                    'cs4234',
+                    'algorithm'
+                ),
+                new Array(
+                    'matching',
+                    'graph matching',
+                    'augmenting path',
+                    'bipartite',
+                    'graph',
+                    'cs3233',
+                    'cs4234',
+                    'matching',
+                    'algorithm'
+                ),
+                new Array(
+                    'mvc',
+                    'min vertex cover',
+                    'np-hard',
+                    'graph',
+                    'bipartite',
+                    'tree',
+                    'tree',
+                    'dp',
+                    'bipartite',
+                    'matching',
+                    'max flow',
+                    'cs3233',
+                    'cs4234'
+                ),
+                new Array(
+                    'steinertree',
+                    'steiner tree',
+                    'np-hard',
+                    'graph',
+                    'mst',
+                    'cs4234'
+                ),
+                new Array(
+                    'tsp',
+                    'traveling salesperson problem',
+                    'np-hard',
+                    'graph',
+                    'dp',
+                    'mst',
+                    'cs3233',
+                    'cs4234'
+                ),
+                new Array(
+                    'reductions',
+                    'np-complete reductions',
+                    'cs3230',
+                    'cs4234'
+                )
+            );
+
+            // generate tags
+            function createFilters() {
+                var filterList = new Array();
+                for (var i = 0; i < allViz.length; ++i) {
+                    var thisVizTags = allViz[i];
+                    for (var j = 1; j < thisVizTags.length; ++j)
+                        if ($.inArray(thisVizTags[j], filterList) == -1)
+                            filterList.push(thisVizTags[j]);
+                }
+                filterList.sort();
+                for (var i = 0; i < filterList.length; ++i)
+                    // if (i>0 && filterList[i]!=filterList[i-1]) // avoid duplicates
+                    $('#filters').append("<span class='filter'>" + filterList[i] + "</span>");
+            }
+            createFilters();
+
+            // tag and search mechanism
+            $('#filters-and-lines').hide();
+            $('#emptySearchMsg').hide();
+            var isEmptySearch = true;
+            var searchTerm = new Array(""); // index 0 is the value from the search bar. Indices 1+ are values from tags.
+
+            // search/unsearch from tag filters
+            $('.filter').click(function() {
+                // add value to search
+                searchTerm[searchTerm.length] = $(this).html();
+                showResults();
+                $('#active-tags').append('<div class="active-tag">' + $(this).html() + '<span>&#x2715;</span></div>');
+                $('.active-tag span').unbind('click').bind('click', function() {
+                    // remove value from search
+                    var indexToRemove = searchTerm.indexOf($(this).parent().text());
+                    searchTerm.splice(indexToRemove, 1);
+                    showResults();
+                    $(this).parent().remove(); // visual
+                });
+            });
+
+            // instant search from search bar
+            $('#search').each(function() {
+                // Save current value of element
+                $(this).data('oldVal', $(this));
+
+                // Look for changes in the value
+                $(this).bind("propertychange keyup input paste", function(event) {
+                    // If value has changed...
+                    if ($(this).data('oldVal') != $(this).val()) {
+                        // Updated stored value
+                        $(this).data('oldVal', $(this).val());
+                        searchTerm[0] = $(this).val();
+                        showResults();
+                    }
+                });
+            });
+
+            $('#searchbar').submit(function() {
+                return false;
+            });
+
+            // find vizs with tag searchTerm
+            function showResults() {
+                isEmptySearch = true;
+                $('#emptySearchMsg').hide();
+                $('.viz').hide();
+                for (var i = 0; i < allViz.length; ++i) { // for each visualisation
+                    var thisVizTags = allViz[i]; // array of the tags this visualisation has
+                    var foundAll = true;
+                    for (var j = 0; j < searchTerm.length; ++j) // for each search term
+                        foundAll = foundAll && findOneTag(searchTerm[j], thisVizTags);
+                    if (foundAll) {
+                        $('#' + thisVizTags[0]).show();
+                        isEmptySearch = false;
+                    }
+                }
+                if (isEmptySearch)
+                    $('#emptySearchMsg').show();
+            }
+
+            function findOneTag(tag, vizArr) {
+                var found = false;
+                for (var i = 0; i < vizArr.length; ++i) {
+                    var patt = new RegExp(tag, "i");
+                    if (patt.test(vizArr[i]))
+                        found = true;
+                }
+                return found;
+            }
+
+            // styling - arrow rotation, show filters-and-lines
+            $("#show-filters").click(function() {
+                if ($("#filters-and-lines").is(":hidden"))
+                    showFilters();
+                else
+                    hideFilters();
+            });
+
+            function showFilters() {
+                $("#filters-and-lines").slideDown("slow");
+                $("#show-filters").html('&#9653;'); // ^
+            }
+
+            function hideFilters() {
+                $("#filters-and-lines").slideUp("slow");
+                $("#show-filters").html('&#9663;'); // v
+            }
+
+            // styling - surprise colour stuff
+            $('#search').focus(function() { // search inset box-shadow
+                $(this).css("box-shadow", "0px 0px 3px " + surpriseColour + " inset");
+                $(this).css("color", "black");
+            });
+            $('#search').focusout(function() {
+                if ($(this).val().trim() == "") {
+                    $(this).css("box-shadow", "0px 0px 3px #929292 inset");
+                    $(this).css("color", "#888888");
+                }
+            });
+            $('#show-filters').css("background-color", surpriseColour); // search filter button background
+            $('#temp a').css("background-color", surpriseColour); // link to old site button
+            $('.filter').css("background-color", "#aaaaaa"); // filter tags on hover
+            $('.filter').hover(function() {
+                $(this).css("background-color", surpriseColour);
+            }, function() {
+                $(this).css("background-color", "#aaaaaa");
+            });
+            $(document).ready(function() {
+                setTimeout(function() {
+                    $('#change-lang-popup').fadeOut('slow')
+                }, 5000)
+
+                setTimeout(function() {
+                    $('#message-popup').fadeOut('slow')
+                }, 5000)
+            })
+            $(document).ready(function() {
+                const platform = navigator ? .userAgentData ? .platform || navigator ? .platform || 'unknown';
+                window.addEventListener('keydown', function(e) {
+                    if (platform === 'macOS') {
+                        if (e.key === 'f' && e.metaKey) {
+                            e.preventDefault()
+                            $('#search').focus()
+                        }
+                    } else {
+                        if (e.key === 'f' && e.ctrlKey) {
+                            e.preventDefault()
+                            $('#search').focus()
+                        }
+                    }
+                })
+            })
+            $('#dismiss-message-btn').click(function() {
+                $('#message-popup').fadeOut('fast')
+                setCookie('dont_want_popup', 1, 1)
+            })
+        });
+    </script>
+</body>
+
+</html>
