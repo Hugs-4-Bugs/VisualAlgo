@@ -29,6 +29,7 @@
 - **Self-Paced:** Learn at your own pace, revisit topics as needed with easy-to-follow visualizations.
 - **Free Access:** No account creation needed, and the platform is accessible to all.
 - **Interview Preparation:** Great for coding interviews and competitive programming practice.
+  
 
 ## How to Use the Website
 
